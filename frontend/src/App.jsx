@@ -1,8 +1,9 @@
-import './App.css';
+import './App.scss';
+import Main from './pages/Main';
 
 function App() {
   return (
-    <h1>olar</h1>
+    <Main />
   );
 }
 
