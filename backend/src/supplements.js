@@ -16,13 +16,23 @@ async function findCarByName(nome) {
     return await knex('carros').where({ nome }).first();
 }
 
+async function findCarById(id) {
+    return await knex('carros').where({ id }).first();
+}
+
 async function findSellerByCpf(cpf) {
     return await knex('vendedores').where({ cpf }).first();
+}
+
+async function runDeleteCar(carro) {
+    return knex('carros').where({ id: carro.id }).delete();
 }
 
 module.exports = {
     displayError,
     runResponse,
     findCarByName,
-    findSellerByCpf
+    findSellerByCpf,
+    runDeleteCar,
+    findCarById
 }
