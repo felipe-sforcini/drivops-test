@@ -1,4 +1,3 @@
-const knex = require('../services/connection');
 const { displayError, runResponse, runDeleteCar, findCarById } = require('../../src/supplements');
 
 const deleteCar = async (req, res) => {
