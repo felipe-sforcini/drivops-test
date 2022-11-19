@@ -11,8 +11,10 @@ const registerCar = async (req, res) => {
             return runResponse(400, 'Esse carro já foi cadastrado', res);
         }
 
+        const valorEmCentavos = Number(valor) * 100;
+
         const registration = await knex('carros')
-            .insert({ nome, valor })
+            .insert({ nome, valor: `${valorEmCentavos}` })
             .returning(['nome', 'valor']);
 
         if (!registration) {

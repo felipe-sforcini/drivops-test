@@ -12,7 +12,7 @@ function Main() {
 
             setCars(response.data);
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -38,7 +38,7 @@ function Main() {
             handleClearForm();
 
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -58,12 +58,12 @@ function Main() {
 
             const indexCar = localCars.findIndex((car) => car.id === id);
 
-            localCars.splice(1, indexCar);
+            localCars.splice(indexCar, 1);
 
             setCars(localCars);
 
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -97,7 +97,7 @@ function Main() {
                     <div key={car.id} className='cars'>
                         <div className="car-price">
                             <h3>{car.nome}</h3>
-                            <h4>R${car.valor}</h4>
+                            <h4>R${(Number(car.valor) / 100).toFixed(2)}</h4>
                         </div>
                         <div>
                             <button
