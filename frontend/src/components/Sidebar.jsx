@@ -8,6 +8,7 @@ export default function Sidebar() {
         <div className="sidebar-icons">
             <button className="btn-purple" onClick={() => navigate("/cars")}>Carros</button>
             <button className="btn-purple" onClick={() => navigate("/sellers")}>Vendedores</button>
+            <button className="btn-purple" onClick={() => navigate("/sales")}>Vendas</button>
         </div>
     )
 }
