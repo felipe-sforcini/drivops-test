@@ -6,6 +6,7 @@ import Sidebar from '../../components/Sidebar';
 export default function Sales() {
     const [sellers, setSellers] = useState([]);
     const [cars, setCars] = useState([]);
+    const [sales, setSales] = useState([]);
     const [form, setForm] = useState({ nome: '', valor: '' });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -15,6 +16,16 @@ export default function Sales() {
             const response = await api.get('/carros');
 
             setCars(response.data);
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async function loadSales() {
+        try {
+            const response = await api.get('/vendas');
+
+            setSales(response.data);
         } catch (error) {
             throw error
         }
@@ -36,29 +47,35 @@ export default function Sales() {
         setError('');
         setSuccess('');
 
-        if (!form.nome) {
-            setError('O nome é obrigatório...');
+        if (!form.cpf) {
+            setError('O cpf é obrigatório...');
             return;
         }
 
-        if (!form.valor) {
-            setError('O valor é obrigatório...');
+        if (!form.carro) {
+            setError('O carro é obrigatório...');
             return;
         }
 
-        await handleAddCar();
+        if (!form.data) {
+            setError('A data é obrigatória...');
+            return;
+        }
+
+        await handleAddSale();
         setSuccess('Cadastro efetuado com sucesso!');
     }
 
-    async function handleAddCar() {
+    async function handleAddSale() {
         try {
-            const response = await api.post('/carros', {
-                nome: form.nome,
-                valor: form.valor
+            const response = await api.post('/vendas', {
+                cpf: form.cpf,
+                carro: form.carro,
+                data: form.data
             });
 
-            setCars([...cars, response.data]);
-            loadCars();
+            setSales([...sales, response.data]);
+            loadSales();
             handleClearForm();
 
         } catch (error) {
@@ -71,7 +88,7 @@ export default function Sales() {
     }
 
     function handleClearForm() {
-        setForm({ nome: '', valor: '' });
+        setForm({ cpf: '', carro: '', data: '' });
     }
 
     async function deleteCar(id) {
@@ -94,6 +111,7 @@ export default function Sales() {
     useEffect(() => {
         loadCars();
         loadSellers();
+        loadSales();
     }, []);
 
     return (
@@ -103,27 +121,43 @@ export default function Sales() {
                 <strong>Registrar nova venda</strong>
                 <form className='square' onSubmit={handleSubmit}>
                     <input
-                        name='nome'
+                        name='cpf'
                         type="text"
-                        placeholder='Nome do(a) vendedor(a)'
-                        value={form.nome}
+                        placeholder='CPF do(a) vendedor(a)'
+                        value={form.cpf}
                         list='name-list'
                         onChange={handleChangeInputValue}
                     />
 
                     <datalist id='name-list'>
                         {sellers.map((seller) => (
-                            <option key={seller.id} value={seller.nome}></option>
+                            <option key={seller.id} value={seller.cpf}></option>
                         ))}
                     </datalist>
 
                     <input
-                        name='valor'
+                        name='carro'
                         type="text"
-                        placeholder='Valor'
-                        value={form.valor}
+                        placeholder='Carro'
+                        value={form.carro}
+                        list='cars-list'
                         onChange={handleChangeInputValue}
                     />
+
+                    <datalist id='cars-list'>
+                        {cars.map((car) => (
+                            <option key={car.id} value={car.nome}></option>
+                        ))}
+                    </datalist>
+
+                    <input
+                        name='data'
+                        type="date"
+                        placeholder='Valor'
+                        value={form.data}
+                        onChange={handleChangeInputValue}
+                    />
+
 
                     {error && <span>{error}</span>}
                     {success && <span>{success}</span>}
@@ -132,11 +166,12 @@ export default function Sales() {
                 </form>
                 <strong>Lista de vendas</strong>
                 <div className='square'>
-                    {cars.map((car) => (
-                        <div key={car.id} className='cars'>
+                    {sales.map((sale) => (
+                        <div key={sale.id} className='sales'>
                             <div>
-                                <h3>{car.nome}</h3>
-                                <h4>R${(Number(car.valor) / 100).toFixed(2)}</h4>
+                                <h3>{sale.nome_vendedor}</h3>
+                                <h4>{sale.carro_nome}</h4>
+                                <h4>Data da venda: {(sale.data_venda).slice(0, 10)}</h4>
                             </div>
                         </div>
                     ))}

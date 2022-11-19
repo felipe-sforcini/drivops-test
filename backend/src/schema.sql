@@ -23,3 +23,18 @@ CREATE TABLE usuarios (
   	senha text not null
 );
 
+DROP TABLE IF EXISTS vendas;
+
+CREATE TABLE vendas(
+  id serial primary key,
+  vendedor_id int not null,
+  nome_vendedor text not null,
+  carro_id int not null,
+  carro_nome text not null,
+  data_venda date not null,
+  valor_venda int not null,
+  foreign key(vendedor_id) references vendedores(id),
+  foreign key(carro_id) references carros(id)
+);
+
+
